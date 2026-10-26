@@ -1,0 +1,62 @@
+### Faculty Performance & Academic Activity Dashboard - REST Client Tests
+@baseUrl = http://localhost:5000/api
+
+### 1. Health Check
+GET {{baseUrl}}/health
+
+### 2. Login as Admin
+# @name adminLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@college.edu",
+  "password": "Admin@123"
+}
+
+### 3. Login as HoD
+# @name hodLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "hod.cse@college.edu",
+  "password": "Hod@123"
+}
+
+### 4. Login as Faculty
+# @name facultyLogin
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "faculty1@college.edu",
+  "password": "Faculty@123"
+}
+
+### 5. Get Current User Profile (with Cookie / Token)
+GET {{baseUrl}}/auth/me
+
+### 6. Get Academic Years
+GET {{baseUrl}}/academic-years
+
+### 7. Get Departments
+GET {{baseUrl}}/departments
+
+### 8. Get Scoring Configuration
+GET {{baseUrl}}/scoring-config
+
+### 9. Get Teaching Records
+GET {{baseUrl}}/teaching?page=1&limit=10
+
+### 10. Get Publications Records
+GET {{baseUrl}}/publications?page=1&limit=10
+
+### 11. Get FDPs Records
+GET {{baseUrl}}/fdps?page=1&limit=10
+
+### 12. Get Consultancy Records
+GET {{baseUrl}}/consultancy?page=1&limit=10
+
+### 13. Get Patents Records
+GET {{baseUrl}}/patents?page=1&limit=10

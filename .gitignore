@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Production build artifacts
+dist/
+client/dist/
+
+# Environment files
+.env
+.env.local
+server/.env
+
+# Uploads directory (preserve folder with .gitkeep)
+server/uploads/*
+!server/uploads/.gitkeep
+
+# Logs and databases
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.system_generated/
+
+# OS files
+.DS_Store
+Thumbs.db
