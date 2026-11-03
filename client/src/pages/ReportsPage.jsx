@@ -24,9 +24,12 @@ export const ReportsPage = () => {
   useEffect(() => {
     const loadMetadata = async () => {
       try {
+        // Faculty may only export their own report, so the faculty directory is not needed (or allowed)
         const [dRes, uRes] = await Promise.all([
           departmentsApi.list(),
-          usersApi.list({ role: 'faculty', limit: 100 }),
+          role === 'faculty'
+            ? Promise.resolve({ data: { success: true, users: [user] } })
+            : usersApi.list({ role: 'faculty', limit: 100 }),
         ]);
         if (dRes.data.success) {
           setDepartments(dRes.data.departments);

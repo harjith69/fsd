@@ -178,8 +178,11 @@ export const updateRecord = async (req, res, next) => {
       }
     }
 
-    // Apply updates
-    const updated = await Model.findByIdAndUpdate(id, req.body, {
+    // Apply updates: status, owner and HoD remarks only change through the workflow actions
+    const { status, faculty, remarks, _id, ...updates } = req.body;
+    if (req.user.role !== 'faculty' && remarks !== undefined) updates.remarks = remarks;
+
+    const updated = await Model.findByIdAndUpdate(id, updates, {
       new: true,
       runValidators: true,
     })
@@ -251,6 +254,13 @@ export const submitRecord = async (req, res, next) => {
       return res.status(403).json({ success: false, message: 'You can only submit your own records.' });
     }
 
+    if (record.status !== 'Draft' && record.status !== 'Rejected') {
+      return res.status(409).json({
+        success: false,
+        message: `Cannot submit a record in '${record.status}' status. Only Draft or Rejected records can be submitted.`,
+      });
+    }
+
     record.status = 'Submitted';
     record.remarks = req.body.remarks || record.remarks || '';
     await record.save();
@@ -294,6 +304,13 @@ export const approveRecord = async (req, res, next) => {
           message: 'You can only approve records for faculty in your own department.',
         });
       }
+    }
+
+    if (record.status !== 'Submitted') {
+      return res.status(409).json({
+        success: false,
+        message: `Only Submitted records can be approved. This record is '${record.status}'.`,
+      });
     }
 
     record.status = 'Approved';
@@ -341,6 +358,13 @@ export const rejectRecord = async (req, res, next) => {
           message: 'You can only reject records for faculty in your own department.',
         });
       }
+    }
+
+    if (record.status !== 'Submitted') {
+      return res.status(409).json({
+        success: false,
+        message: `Only Submitted records can be rejected. This record is '${record.status}'.`,
+      });
     }
 
     record.status = 'Rejected';

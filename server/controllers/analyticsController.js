@@ -19,6 +19,18 @@ export const getFacultyAnalytics = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Faculty not found.' });
     }
 
+    // Faculty may view only their own analytics; an HoD only faculty of the same department
+    if (req.user.role === 'faculty' && req.user._id.toString() !== faculty._id.toString()) {
+      return res.status(403).json({ success: false, message: 'You can only view your own analytics.' });
+    }
+    if (req.user.role === 'hod') {
+      const hodDept = req.user.department?._id?.toString() || req.user.department?.toString();
+      const facDept = faculty.department?._id?.toString() || faculty.department?.toString();
+      if (hodDept !== facDept) {
+        return res.status(403).json({ success: false, message: 'Faculty is not in your department.' });
+      }
+    }
+
     // Resolve academic year: provided id, or current year, or latest year
     let academicYear = null;
     if (year) {

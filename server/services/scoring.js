@@ -150,14 +150,15 @@ export const calculateFacultyScore = async (facultyId, academicYearId, skipCache
   const normPatents = Math.min(100, Math.round(((patentPoints || 0) / (targets.patentPoints || 15)) * 100));
   const normFeedback = Math.min(100, Math.round(((avgFeedbackScore || 0) / (targets.feedbackScore || 5)) * 100));
 
-  // Weighted sum to compute Performance Index (0-100)
+  // Weighted sum to compute Performance Index (0-100).
+  // `??` keeps a deliberately configured weight of 0 instead of replacing it with the default.
   const weightedScore =
-    (normTeaching * (weights.teaching || 30) +
-      normPubs * (weights.publications || 25) +
-      normFdp * (weights.fdp || 10) +
-      normConsult * (weights.consultancy || 15) +
-      normPatents * (weights.patents || 10) +
-      normFeedback * (weights.feedback || 10)) /
+    (normTeaching * (weights.teaching ?? 30) +
+      normPubs * (weights.publications ?? 25) +
+      normFdp * (weights.fdp ?? 10) +
+      normConsult * (weights.consultancy ?? 15) +
+      normPatents * (weights.patents ?? 10) +
+      normFeedback * (weights.feedback ?? 10)) /
     100;
 
   const performanceIndex = Number(weightedScore.toFixed(1));

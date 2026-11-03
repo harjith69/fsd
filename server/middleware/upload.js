@@ -34,7 +34,9 @@ const fileFilter = (req, file, cb) => {
   if (extname && mimetype) {
     cb(null, true);
   } else {
-    cb(new Error('Only PDF, JPG, and PNG documents are permitted as proof files.'));
+    const err = new Error('Only PDF, JPG, and PNG documents are permitted as proof files.');
+    err.statusCode = 400;
+    cb(err);
   }
 };
 
