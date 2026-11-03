@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "main": "index.js",
   "description": "Faculty Performance & Academic Activity Dashboard (MERN)",
   "workspaces": [
     "server",

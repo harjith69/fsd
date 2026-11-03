@@ -1,11 +1,3 @@
-import app from '../server/server.js';
-import { connectDB } from '../server/config/db.js';
+import app from '../index.js';
 
-export default async function handler(req, res) {
-  try {
-    await connectDB();
-  } catch (err) {
-    console.error('[Vercel Serverless] DB connection error:', err);
-  }
-  return app(req, res);
-}
+export default app;

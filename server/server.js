@@ -1,4 +1,5 @@
 import express from 'express';
+import fs from 'fs';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -114,6 +115,18 @@ app.use('/api/reports', reportRoutes);
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok', time: new Date().toISOString() });
 });
+
+// Serve compiled React client in production if dist exists
+const clientDistPath = path.resolve(__dirname, '..', 'client', 'dist');
+if (fs.existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/uploads')) {
+      return next();
+    }
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  });
+}
 
 // 404 & Centralized Error Handler
 app.use(notFound);
