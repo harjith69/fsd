@@ -2,6 +2,7 @@
   "name": "faculty-dashboard",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Faculty Performance & Academic Activity Dashboard (MERN)",
   "workspaces": [
     "server",

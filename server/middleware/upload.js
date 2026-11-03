@@ -5,10 +5,12 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const uploadsDir = path.resolve(__dirname, '..', 'uploads');
+const uploadsDir = process.env.VERCEL
+  ? path.join('/tmp', 'uploads')
+  : path.resolve(__dirname, '..', 'uploads');
 
 if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
+  try { fs.mkdirSync(uploadsDir, { recursive: true }); } catch (e) {}
 }
 
 const storage = multer.diskStorage({
